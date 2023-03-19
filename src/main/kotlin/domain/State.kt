@@ -1,6 +1,6 @@
 package domain
 
-import java.time.Instant
+import TimeUtils.now
 
 class State {
     private var type: Type = Type.CHILL
@@ -14,8 +14,8 @@ class State {
     }
 
     fun update(type: Type) {
-        require(lastStateUpdate + type.cooldown < Instant.now().epochSecond)
+        require(lastStateUpdate + type.cooldown < now().epochSecond)
         this.type = type
-        lastStateUpdate = Instant.now().epochSecond
+        lastStateUpdate = now().epochSecond
     }
 }

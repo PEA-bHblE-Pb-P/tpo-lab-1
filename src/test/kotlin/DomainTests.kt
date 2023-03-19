@@ -1,3 +1,6 @@
+import TimeUtils.now
+import TimeUtils.skip
+import TimeUtils.withMockedNow
 import domain.Human
 import domain.HyperBrainCreature
 import domain.Location
@@ -6,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class DomainTests {
     @Test
-    fun `simple`() {
+    fun simple() {
         val s = Location("SPB")
         val t = Location("TMS")
         val i = HyperBrainCreature("Ivan", s)
@@ -14,10 +17,11 @@ class DomainTests {
         val m = Human("Max", s)
         val r = Human("Roman", s)
 
-        // TODO замокай текущее время, чтобы кулдаун после действий прошёл
-//         v.hitAndRun(r)
+        v.hitAndRun(r)
         m.moveTo(t)
-//        v.hitAndRun(m)
-        v.argue(arrayOf(i).toList())
+        skip(21L)
+        v.hitAndRun(m)
+        skip(41L)
+        v.argue(listOf(i))
     }
 }
