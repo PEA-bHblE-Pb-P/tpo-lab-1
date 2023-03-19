@@ -4,7 +4,7 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
 
     fun argue(opponents: List<HyperBrainCreature>) {
         require(opponents.all {
-            it.location.name == this.location.name
+            it.location.name == this.location.name && !it.state.isBusy()
         })
         opponents.forEach {
             it.state.update(State.Type.ARGUMENT)

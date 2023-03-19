@@ -1,6 +1,7 @@
 package domain
 
 import TimeUtils.now
+import java.time.Instant
 
 class State {
     private var type: Type = Type.CHILL
@@ -17,5 +18,9 @@ class State {
         require(lastStateUpdate + type.cooldown < now().epochSecond)
         this.type = type
         lastStateUpdate = now().epochSecond
+    }
+
+    fun isBusy(): Boolean {
+        return lastStateUpdate + type.cooldown >= Instant.now().epochSecond
     }
 }
