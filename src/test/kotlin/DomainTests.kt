@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class DomainTests {
     @Test
-    fun `simple`() {
+    fun simple() {
         val s = Location("SPB")
         val t = Location("TMS")
         val i = HyperBrainCreature("Ivan", s)
@@ -21,6 +21,7 @@ class DomainTests {
         m.moveTo(t)
         skip(21L)
         v.hitAndRun(m)
-        v.argue(arrayOf(i).toList())
+        skip(41L)
+        v.argue(listOf(i))
     }
 }
