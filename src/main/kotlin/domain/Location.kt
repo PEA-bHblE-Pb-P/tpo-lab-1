@@ -1,4 +1,3 @@
 package domain
 
-class Location (val name: String){
-}
+data class Location (val name: String)

@@ -1,3 +1,6 @@
+import TimeUtils.now
+import TimeUtils.skip
+import TimeUtils.withMockedNow
 import domain.Human
 import domain.HyperBrainCreature
 import domain.Location
@@ -14,10 +17,10 @@ class DomainTests {
         val m = Human("Max", s)
         val r = Human("Roman", s)
 
-        // TODO замокай текущее время, чтобы кулдаун после действий прошёл
-//         v.hitAndRun(r)
+        v.hitAndRun(r)
         m.moveTo(t)
-//        v.hitAndRun(m)
+        skip(21L)
+        v.hitAndRun(m)
         v.argue(arrayOf(i).toList())
     }
 }
