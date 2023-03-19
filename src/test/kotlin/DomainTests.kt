@@ -1,10 +1,7 @@
-import TimeUtils.now
 import TimeUtils.skip
-import TimeUtils.withMockedNow
 import domain.Human
 import domain.HyperBrainCreature
 import domain.Location
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class DomainTests {
