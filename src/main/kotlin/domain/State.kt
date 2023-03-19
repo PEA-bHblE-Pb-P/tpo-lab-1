@@ -1,7 +1,6 @@
 package domain
 
 import TimeUtils.now
-import java.time.Instant
 
 class State {
     private var type: Type = Type.CHILL
@@ -21,6 +20,6 @@ class State {
     }
 
     fun isBusy(): Boolean {
-        return lastStateUpdate + type.cooldown >= Instant.now().epochSecond
+        return lastStateUpdate + type.cooldown >= now().epochSecond
     }
 }
