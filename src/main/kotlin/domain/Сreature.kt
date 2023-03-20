@@ -9,4 +9,7 @@ abstract class Creature(val name: String, var location: Location) {
         println("${this.name} перемещается в ${location.name}")
     }
 
+    fun getStateType(): State.Type {
+        return state.type
+    }
 }

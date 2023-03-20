@@ -3,7 +3,7 @@ package domain
 import TimeUtils.now
 
 class State {
-    private var type: Type = Type.CHILL
+    var type: Type = Type.CHILL
     private var lastStateUpdate: Long = 0
 
     enum class Type(val cooldown: Long) {
