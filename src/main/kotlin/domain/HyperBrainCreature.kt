@@ -13,6 +13,7 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
     }
 
     fun hitAndRun(victim: Human) {
+        require(victim.location.name == this.location.name)
         this.state.update(State.Type.PLAYING)
         println("${this.name} ударил ${victim.name} и убежал")
     }
