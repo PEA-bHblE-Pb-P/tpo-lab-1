@@ -24,11 +24,11 @@ class MathTest {
     class TestInputProvider : ArgumentsProvider {
         override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =
             Stream.of(
-                Arguments.of(-1.73205,  0.00001,   -1.047197),
-                Arguments.of(-0.57735,  0.00001,   -0.523598),
-                Arguments.of("0".toDouble(),    0.00001,    "0".toDouble()),
-                Arguments.of(0.57735,  0.00001,    0.523598),
-                Arguments.of(1.73205,  0.00001,    1.047197)
+                Arguments.of(-1.73205,   0.00001,   -1.047197),
+                Arguments.of(-0.57735,   0.00001,   -0.523598),
+                Arguments.of( 0.0,       0.00001,    0.0),
+                Arguments.of( 0.57735,   0.00001,    0.523598),
+                Arguments.of( 1.73205,   0.00001,    1.047197)
             )
     }
 }

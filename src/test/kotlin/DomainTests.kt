@@ -2,13 +2,11 @@ import TimeUtils.skip
 import domain.Human
 import domain.HyperBrainCreature
 import domain.Location
-import domain.State
-import org.junit.jupiter.api.DynamicTest
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestFactory
-import org.junit.jupiter.api.assertThrows
-import java.util.*
+import domain.State.Type.CHILL
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.TestFactory
 
 class DomainTests {
     private fun setupObjects(): Triple<Map<String, Location>, Map<String, HyperBrainCreature>, Map<String, Human>> {
@@ -24,25 +22,8 @@ class DomainTests {
         return Triple(locs, hypers, humans)
     }
 
-    @Test
-    fun simple() {
-        val s = Location("SPB")
-        val t = Location("TMS")
-        val i = HyperBrainCreature("Ivan", s)
-        val v = HyperBrainCreature("Vsevolod", s)
-        val m = Human("Max", s)
-        val r = Human("Roman", s)
-
-        v.hitAndRun(r)
-        m.moveTo(t)
-        skip(21L)
-        v.hitAndRun(m)
-        skip(41L)
-        v.argue(listOf(i))
-    }
-
     @TestFactory
-    fun plays(): Collection<DynamicTest?>? {
+    fun plays(): Collection<DynamicTest> {
         return listOf(
             DynamicTest.dynamicTest("Invalid game") {
                 val (locs, hypers, humans) = setupObjects()
@@ -57,22 +38,24 @@ class DomainTests {
     }
 
     @TestFactory
-    fun invalidActions(): Collection<DynamicTest?>? {
+    fun invalidActions(): Collection<DynamicTest> {
         return listOf(
             DynamicTest.dynamicTest("Invalid game") {
                 val (locs, hypers, humans) = setupObjects()
                 humans["Roman"]?.moveTo(locs["Moscow"]!!)
-                assertThrows<java.lang.IllegalArgumentException> { hypers["Seva"]?.hitAndRun(humans["Roman"]!!) }
+                assertThatThrownBy { hypers["Seva"]?.hitAndRun(humans["Roman"]!!) }
+                    .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue") {
                 val (locs, hypers, humans) = setupObjects()
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
-                assertThrows<java.lang.IllegalArgumentException> { hypers["Seva"]?.argue(listOf(hypers["Ivan"]!!)) }
+                assertThatThrownBy { hypers["Seva"]?.argue(listOf(hypers["Ivan"]!!)) }
+                    .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue with some peoples") {
                 val (locs, hypers, humans) = setupObjects()
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
-                assertThrows<java.lang.IllegalArgumentException> {
+                assertThatThrownBy {
                     hypers["Seva"]?.argue(
                         listOf(
                             hypers["Max"]!!,
@@ -80,7 +63,9 @@ class DomainTests {
                         )
                     )
                 }
-                assert(hypers["Max"]?.getStateType() == State.Type.CHILL)
+                    .isExactlyInstanceOf(IllegalArgumentException::class.java)
+
+                assertThat(hypers["Max"]?.getStateType()).isEqualTo(CHILL)
             },
         )
     }
