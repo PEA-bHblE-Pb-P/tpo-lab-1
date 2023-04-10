@@ -19,6 +19,7 @@ dependencies {
 }
 
 tasks.test {
+    exclude("**/*TestInputProvider.class")
     useJUnitPlatform()
 }
 
