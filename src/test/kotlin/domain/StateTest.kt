@@ -1,30 +1,26 @@
 package domain
 
-import TimeUtils.mockNow
 import TimeUtils.skip
+import TimeUtils.withMockedNow
 import domain.State.Type.CHILL
 import domain.State.Type.PLAYING
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
 class StateTest {
-    @BeforeEach
-    fun before() = mockNow()
-
     @Test
-    fun `isBusy should return false for initial state`() {
+    fun `isBusy should return false for initial state`() = withMockedNow {
         val state = State()
 
         assertThat(state.isBusy()).isFalse
     }
 
     @Test
-    fun `isBusy should return true when total cooldown equals now`() {
+    fun `isBusy should return true when total cooldown equals now`() = withMockedNow {
         val state = State()
 
         state.update(PLAYING)
@@ -34,7 +30,7 @@ class StateTest {
     }
 
     @Test
-    fun `isBusy should return true when total cooldown is more than now`() {
+    fun `isBusy should return true when total cooldown is more than now`() = withMockedNow {
         val state = State()
 
         state.update(PLAYING)
@@ -44,7 +40,7 @@ class StateTest {
     }
 
     @Test
-    fun `isBusy should return true when total cooldown is less than now`() {
+    fun `isBusy should return true when total cooldown is less than now`() = withMockedNow {
         val state = State()
 
         state.update(PLAYING)
@@ -58,20 +54,24 @@ class StateTest {
         val stateType = State.Type.values().random()
         return listOf(
             dynamicTest("should return true before cooldown") {
-                val state = State()
+                withMockedNow {
+                    val state = State()
 
-                state.update(stateType)
-                skip(stateType.cooldown-42L)
+                    state.update(stateType)
+                    skip(stateType.cooldown - 42L)
 
-                assertThat(state.isBusy()).isTrue
+                    assertThat(state.isBusy()).isTrue
+                }
             },
             dynamicTest("should return false after cooldown") {
-                val state = State()
+                withMockedNow {
+                    val state = State()
 
-                state.update(stateType)
-                skip(stateType.cooldown+42L)
+                    state.update(stateType)
+                    skip(stateType.cooldown + 42L)
 
-                assertThat(state.isBusy()).isFalse
+                    assertThat(state.isBusy()).isFalse
+                }
             },
         )
     }

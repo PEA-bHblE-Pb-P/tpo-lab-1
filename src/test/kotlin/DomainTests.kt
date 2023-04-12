@@ -1,5 +1,5 @@
-import TimeUtils.mockNow
 import TimeUtils.skip
+import TimeUtils.withMockedNow
 import domain.Human
 import domain.HyperBrainCreature
 import domain.Location
@@ -27,14 +27,15 @@ class DomainTests {
     fun plays(): Collection<DynamicTest> {
         return listOf(
             DynamicTest.dynamicTest("Invalid game") {
-                mockNow()
-                val (locs, hypers, humans) = setupObjects()
-                hypers["Seva"]!!.hitAndRun(humans["Roman"]!!)
-                hypers["Max"]!!.moveTo(locs["Tomsk"]!!)
-                skip(21L)
-                hypers["Seva"]!!.hitAndRun(humans["Dima"]!!)
-                skip(41L)
-                hypers["Seva"]!!.argue(listOf(hypers["Ivan"]!!))
+                withMockedNow {
+                    val (locs, hypers, humans) = setupObjects()
+                    hypers["Seva"]!!.hitAndRun(humans["Roman"]!!)
+                    hypers["Max"]!!.moveTo(locs["Tomsk"]!!)
+                    skip(21L)
+                    hypers["Seva"]!!.hitAndRun(humans["Dima"]!!)
+                    skip(41L)
+                    hypers["Seva"]!!.argue(listOf(hypers["Ivan"]!!))
+                }
             },
         )
     }
@@ -49,13 +50,13 @@ class DomainTests {
                     .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue") {
-                val (locs, hypers, humans) = setupObjects()
+                val (locs, hypers, _) = setupObjects()
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
                 assertThatThrownBy { hypers["Seva"]?.argue(listOf(hypers["Ivan"]!!)) }
                     .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue with some peoples") {
-                val (locs, hypers, humans) = setupObjects()
+                val (locs, hypers, _) = setupObjects()
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
                 assertThatThrownBy {
                     hypers["Seva"]?.argue(
