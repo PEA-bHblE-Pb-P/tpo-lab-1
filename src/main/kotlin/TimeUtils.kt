@@ -1,16 +1,22 @@
 import java.time.Instant
 
 object TimeUtils {
-    private var mockedNow: Instant = Instant.now()
+    private var mockedNow: Instant? = null
 
-    fun now() = mockedNow
+    fun now(): Instant = mockedNow ?: Instant.now()
 
-    fun withMockedNow(now: Instant, func: () -> Unit) {
+    private fun resetNow() {
+        mockedNow = null
+    }
+
+    fun withMockedNow(now: Instant = Instant.now(), func: () -> Unit) {
         mockedNow = now
         func()
+        resetNow()
     }
 
     fun skip(seconds: Long) {
-        mockedNow = mockedNow.plusSeconds(seconds)
+        check(mockedNow != null)
+        mockedNow = mockedNow!!.plusSeconds(seconds)
     }
 }

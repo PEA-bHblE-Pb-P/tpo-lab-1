@@ -4,7 +4,7 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
 
     fun argue(opponents: List<HyperBrainCreature>) {
         require(opponents.all {
-            it.location.name == this.location.name && !it.state.isBusy()
+            it.location.name == this.location.name
         })
         opponents.forEach {
             it.state.update(State.Type.ARGUMENT)
@@ -13,7 +13,7 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
     }
 
     fun hitAndRun(victim: Human) {
-        require(victim.location.name == this.location.name)
+        victim.requireLocation(this.location)
         this.state.update(State.Type.PLAYING)
         println("${this.name} ударил ${victim.name} и убежал")
     }

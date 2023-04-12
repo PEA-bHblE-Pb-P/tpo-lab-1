@@ -3,7 +3,8 @@ package domain
 import TimeUtils.now
 
 class State {
-    var type: Type = Type.CHILL
+    private var _type: Type = Type.CHILL
+    val type get() = _type
     private var lastStateUpdate: Long = 0
 
     enum class Type(val cooldown: Long) {
@@ -14,8 +15,8 @@ class State {
     }
 
     fun update(type: Type) {
-        require(lastStateUpdate + type.cooldown < now().epochSecond)
-        this.type = type
+        require(!isBusy())
+        this._type = type
         lastStateUpdate = now().epochSecond
     }
 
