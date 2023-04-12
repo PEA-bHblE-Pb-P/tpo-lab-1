@@ -1,3 +1,4 @@
+import TimeUtils.mockNow
 import TimeUtils.skip
 import domain.Human
 import domain.HyperBrainCreature
@@ -26,6 +27,7 @@ class DomainTests {
     fun plays(): Collection<DynamicTest> {
         return listOf(
             DynamicTest.dynamicTest("Invalid game") {
+                mockNow()
                 val (locs, hypers, humans) = setupObjects()
                 hypers["Seva"]!!.hitAndRun(humans["Roman"]!!)
                 hypers["Max"]!!.moveTo(locs["Tomsk"]!!)
