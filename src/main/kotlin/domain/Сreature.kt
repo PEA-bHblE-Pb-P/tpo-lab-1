@@ -1,6 +1,6 @@
 package domain
 
-abstract class Creature(val name: String, protected var location: Location) {
+abstract class Creature(val name: String, var location: Location) {
     protected val state = State()
 
     fun moveTo(location: Location) {
