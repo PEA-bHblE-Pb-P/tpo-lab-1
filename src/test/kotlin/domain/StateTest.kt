@@ -2,10 +2,13 @@ package domain
 
 import TimeUtils.mockNow
 import TimeUtils.skip
+import domain.State.Type.CHILL
 import domain.State.Type.PLAYING
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 
@@ -54,7 +57,7 @@ class StateTest {
     fun `isBusy with random state type`(): Collection<DynamicTest> {
         val stateType = State.Type.values().random()
         return listOf(
-            DynamicTest.dynamicTest("should return true before cooldown") {
+            dynamicTest("should return true before cooldown") {
                 val state = State()
 
                 state.update(stateType)
@@ -62,7 +65,7 @@ class StateTest {
 
                 assertThat(state.isBusy()).isTrue
             },
-            DynamicTest.dynamicTest("should return false after cooldown") {
+            dynamicTest("should return false after cooldown") {
                 val state = State()
 
                 state.update(stateType)
@@ -73,5 +76,22 @@ class StateTest {
         )
     }
 
+    @Test
+    fun `update should not require cooldown for initial state`() {
+        val state = State()
 
+        state.update(CHILL)
+    }
+
+    @Test
+    fun `update should require cooldown`() {
+        val state = State()
+
+        state.update(CHILL)
+
+        assertThatThrownBy {
+            state.update(CHILL)
+        }
+            .isExactlyInstanceOf(IllegalArgumentException::class.java)
+    }
 }
