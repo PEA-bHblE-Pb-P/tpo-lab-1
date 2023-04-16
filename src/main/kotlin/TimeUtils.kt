@@ -16,7 +16,7 @@ object TimeUtils {
     }
 
     fun skip(seconds: Long) {
-        check(mockedNow != null)
-        mockedNow = mockedNow!!.plusSeconds(seconds)
+        checkNotNull(mockedNow)
+        mockedNow = mockedNow?.plusSeconds(seconds)
     }
 }

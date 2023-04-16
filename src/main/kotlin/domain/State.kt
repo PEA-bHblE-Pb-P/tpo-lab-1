@@ -8,10 +8,10 @@ class State {
     private var lastStateUpdate: Long = 0
 
     enum class Type(val cooldown: Long) {
-        CHILL(0),
-        ARGUMENT(40),
-        PLAYING(20),
-        MOVING(30)
+        CHILL(cooldown = 0),
+        ARGUMENT(cooldown = 40),
+        PLAYING(cooldown = 20),
+        MOVING(cooldown = 30)
     }
 
     fun update(type: Type) {

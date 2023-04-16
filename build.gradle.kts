@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.0"
+    id("io.gitlab.arturbosch.detekt").version("1.22.0")
     application
     jacoco
 }
@@ -49,6 +50,28 @@ tasks.jacocoTestCoverageVerification {
 tasks.check {
     dependsOn(tasks.jacocoTestReport)
     dependsOn(tasks.jacocoTestCoverageVerification)
+}
+
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    allRules = false // activate all available (even unstable) rules.
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
+        md.required.set(true)
+    }
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    jvmTarget = "14"
+}
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+    jvmTarget = "14"
 }
 
 kotlin {
