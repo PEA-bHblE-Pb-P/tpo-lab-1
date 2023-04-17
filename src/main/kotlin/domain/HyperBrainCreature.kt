@@ -18,8 +18,4 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
         println("${this.name} ударил ${victim.name} и убежал")
     }
 
-    fun solveQuestions() {
-        state.update(State.Type.SOLVING_QUESTIONS)
-    }
-
 }
