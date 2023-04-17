@@ -11,7 +11,8 @@ class State {
         CHILL(cooldown = 0),
         ARGUMENT(cooldown = 40),
         PLAYING(cooldown = 20),
-        MOVING(cooldown = 30)
+        MOVING(cooldown = 30),
+        SOLVING_QUESTIONS(cooldown = 50)
     }
 
     fun update(type: Type) {

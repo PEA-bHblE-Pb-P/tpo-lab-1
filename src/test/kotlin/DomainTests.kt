@@ -1,8 +1,6 @@
 import TimeUtils.skip
 import TimeUtils.withMockedNow
-import domain.Human
-import domain.HyperBrainCreature
-import domain.Location
+import domain.*
 import domain.State.Type.CHILL
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -10,7 +8,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 
 class DomainTests {
-    private fun setupObjects(): Triple<Map<String, Location>, Map<String, HyperBrainCreature>, Map<String, Human>> {
+    private fun setupObjects(): Triple<Map<String, Location>, RaceHyperBrainCreature, RaceHumans> {
         val locs: Map<String, Location> = listOf(
             "SPb", "Moscow", "Tomsk"
         ).associateWith { Location(it) }
@@ -20,15 +18,17 @@ class DomainTests {
         val humans: Map<String, Human> = listOf(
             "Roman" to "SPb", "Dima" to "SPb"
         ).associate { it.first to Human(it.first, Location(it.second)) }
-        return Triple(locs, hypers, humans)
+        return Triple(locs, RaceHyperBrainCreature("HyperBrain", hypers), RaceHumans("Люди", humans))
     }
 
     @TestFactory
     fun plays(): Collection<DynamicTest> {
         return listOf(
-            DynamicTest.dynamicTest("Invalid game") {
+            DynamicTest.dynamicTest("Game") {
                 withMockedNow {
-                    val (locs, hypers, humans) = setupObjects()
+                    val (locs, _hypers, _humans) = setupObjects()
+                    val hypers = _hypers.members
+                    val humans = _humans.members
                     hypers["Seva"]!!.hitAndRun(humans["Roman"]!!)
                     hypers["Max"]!!.moveTo(locs["Tomsk"]!!)
                     skip(21L)
@@ -37,6 +37,22 @@ class DomainTests {
                     hypers["Seva"]!!.argue(listOf(hypers["Ivan"]!!))
                 }
             },
+            DynamicTest.dynamicTest("Meeting") {
+                withMockedNow {
+                    val (locs, _hypers, _humans) = setupObjects()
+                    _hypers.meeting(locs["Moscow"]!!)
+                    skip(31)
+                    _hypers.solveQuestions()
+                }
+            },
+            DynamicTest.dynamicTest("Other race") {
+                withMockedNow {
+                    val (locs, _hypers, _humans) = setupObjects()
+                    val dwarfs = Race("Dwarfs", mapOf("HelloMan" to Creature("HelloMan", locs["SPb"]!!)))
+                    assertThat(dwarfs.name).isEqualTo("Dwarfs")
+                    dwarfs.members["HelloMan"]!!.moveTo(locs["Moscow"]!!)
+                }
+            }
         )
     }
 
@@ -44,19 +60,23 @@ class DomainTests {
     fun invalidActions(): Collection<DynamicTest> {
         return listOf(
             DynamicTest.dynamicTest("Invalid game") {
-                val (locs, hypers, humans) = setupObjects()
+                val (locs, _hypers, _humans) = setupObjects()
+                val hypers = _hypers.members
+                val humans = _humans.members
                 humans["Roman"]?.moveTo(locs["Moscow"]!!)
                 assertThatThrownBy { hypers["Seva"]?.hitAndRun(humans["Roman"]!!) }
                     .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue") {
-                val (locs, hypers, _) = setupObjects()
+                val (locs, _hypers, _humans) = setupObjects()
+                val hypers = _hypers.members
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
                 assertThatThrownBy { hypers["Seva"]?.argue(listOf(hypers["Ivan"]!!)) }
                     .isExactlyInstanceOf(IllegalArgumentException::class.java)
             },
             DynamicTest.dynamicTest("Invalid argue with some peoples") {
-                val (locs, hypers, _) = setupObjects()
+                val (locs, _hypers, _humans) = setupObjects()
+                val hypers = _hypers.members
                 hypers["Ivan"]?.moveTo(locs["Moscow"]!!)
                 assertThatThrownBy {
                     hypers["Seva"]?.argue(
