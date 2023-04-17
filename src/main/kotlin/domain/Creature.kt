@@ -12,4 +12,8 @@ open class Creature(val name: String, var location: Location) {
     fun getStateType(): State.Type {
         return state.type
     }
+
+    fun solveQuestions() {
+        state.update(State.Type.SOLVING_QUESTIONS)
+    }
 }

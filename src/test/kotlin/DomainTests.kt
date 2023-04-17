@@ -18,7 +18,15 @@ class DomainTests {
         val humans: Map<String, Human> = listOf(
             "Roman" to "SPb", "Dima" to "SPb"
         ).associate { it.first to Human(it.first, Location(it.second)) }
-        return Triple(locs, RaceHyperBrainCreature("HyperBrain", hypers), RaceHumans("Люди", humans))
+        return Triple(
+            locs,
+            RaceHyperBrainCreature(
+                "HyperBrain",
+                hypers,
+                ArrayList(arrayOf("Вопрос жизни, вселенной и всего такого").toMutableList())
+            ),
+            RaceHumans("Люди", humans, ArrayList())
+        )
     }
 
     @TestFactory
@@ -48,8 +56,9 @@ class DomainTests {
             DynamicTest.dynamicTest("Other race") {
                 withMockedNow {
                     val (locs, _hypers, _humans) = setupObjects()
-                    val dwarfs = Race("Dwarfs", mapOf("HelloMan" to Creature("HelloMan", locs["SPb"]!!)))
+                    val dwarfs = Race("Dwarfs", mapOf("HelloMan" to Creature("HelloMan", locs["SPb"]!!)), ArrayList())
                     assertThat(dwarfs.name).isEqualTo("Dwarfs")
+                    assertThat(dwarfs.questions.size).isEqualTo(0)
                     dwarfs.members["HelloMan"]!!.moveTo(locs["Moscow"]!!)
                 }
             }
