@@ -1,7 +1,7 @@
 package domain
 
 class RaceHyperBrainCreature(
-    name: String, members: MutableMap<String, HyperBrainCreature>,
+    name: String, members: MutableList<HyperBrainCreature>,
     questions: ArrayList<String>
 ) :
     Race<HyperBrainCreature>(name, members, questions)
