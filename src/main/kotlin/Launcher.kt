@@ -1,23 +1,27 @@
+import TimeUtils.now
+import TimeUtils.withMockedNow
 import domain.Creature
 import domain.Location
+import domain.MeetingScheduler
 import domain.Race
+import domain.Race.VOGON
+import java.time.Instant
 
-fun main() {
+fun main() = withMockedNow(Instant.now()) {
     val location = Location("планета Вогсфера")
     val earth = Location("планета Земля")
-    val vogonRace = Race(
-        name = "ВОГОНЫ",
-        members = mutableListOf(
-            Creature("Простатник Джелц", location),
-            Creature("Простатник Бырдц", location),
-            Creature("Туп Непрроходим", location)
-        ),
-        questions = mutableListOf()
+    val creatures = listOf(
+        Creature("Простатник Джелц", location, VOGON),
+        Creature("Простатник Бырдц", location, VOGON),
+        Creature("Туп Непрроходим", location, VOGON)
     )
+    val questions = listOf(
+        "Может уничтожим Землю?",
+        "Как распространить бюрократию по Вселенной?"
+    )
+    val meetingScheduler = MeetingScheduler(creatures)
 
-    vogonRace.questions.add("Может уничтожим Землю?")
-    vogonRace.questions.add("Как распространить бюрократию по Вселенной?")
+    val meeting = meetingScheduler.scheduleMeetingByRace(VOGON, questions, earth, now())
 
-    vogonRace.meeting(earth)
-    vogonRace.solveQuestions()
+    meeting()
 }

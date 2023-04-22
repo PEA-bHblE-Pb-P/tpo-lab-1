@@ -1,6 +1,6 @@
 package domain
 
-open class Creature(val name: String, var location: Location) {
+open class Creature(val name: String, var location: Location, val race: Race) {
     protected val state = State()
 
     fun moveTo(location: Location) {
@@ -9,11 +9,7 @@ open class Creature(val name: String, var location: Location) {
         println("${this.name} перемещается в ${location.name}")
     }
 
-    fun getStateType(): State.Type {
-        return state.type
-    }
-
-    fun solveQuestions() {
+    fun solveQuestion() {
         state.update(State.Type.SOLVING_QUESTIONS)
     }
 }

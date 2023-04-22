@@ -1,6 +1,8 @@
 package domain
 
-class HyperBrainCreature(name: String, location: Location) : Creature(name, location) {
+import domain.Race.HYPER_BRAIN
+
+class HyperBrainCreature(name: String, location: Location) : Creature(name, location, HYPER_BRAIN) {
 
     fun argue(opponents: List<HyperBrainCreature>) {
         require(opponents.all {
