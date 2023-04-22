@@ -1,7 +1,7 @@
 package domain
 
 class RaceHyperBrainCreature(
-    name: String, override val members: Map<String, HyperBrainCreature>,
+    name: String, members: MutableMap<String, HyperBrainCreature>,
     questions: ArrayList<String>
 ) :
-    Race(name, members, questions)
+    Race<HyperBrainCreature>(name, members, questions)
