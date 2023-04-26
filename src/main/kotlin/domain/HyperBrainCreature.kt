@@ -1,12 +1,13 @@
 package domain
 
 import domain.Race.HYPER_BRAIN
+import kotlinx.coroutines.runBlocking
 
 class HyperBrainCreature(name: String, location: Location) : Creature(name, location, HYPER_BRAIN) {
 
-    fun argue(opponents: List<HyperBrainCreature>) {
+    fun argue(opponents: List<HyperBrainCreature>) = runBlocking {
         require(opponents.all {
-            it.location.name == this.location.name
+            it.location.name == location.name
         })
         opponents.forEach {
             it.state.update(State.Type.ARGUMENT)
@@ -14,10 +15,10 @@ class HyperBrainCreature(name: String, location: Location) : Creature(name, loca
         state.update(State.Type.ARGUMENT)
     }
 
-    fun hitAndRun(victim: Human) {
-        victim.requireLocation(this.location)
-        this.state.update(State.Type.PLAYING)
-        println("${this.name} ударил ${victim.name} и убежал")
+    fun hitAndRun(victim: Human) = runBlocking {
+        victim.requireLocation(location)
+        state.update(State.Type.PLAYING)
+        println("$name ударил ${victim.name} и убежал")
     }
 
 }

@@ -1,6 +1,7 @@
 package domain
 
 import TimeUtils.now
+import kotlinx.coroutines.delay
 
 class State {
     private var _type: Type = Type.CHILL
@@ -15,10 +16,11 @@ class State {
         SOLVING_QUESTIONS(cooldown = 50)
     }
 
-    fun update(type: Type) {
+    suspend fun update(type: Type) {
         require(!isBusy())
         this._type = type
         lastStateUpdate = now().epochSecond
+        delay(type.cooldown * 100)
     }
 
     fun isBusy(): Boolean {
