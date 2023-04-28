@@ -1,4 +1,4 @@
 package domain
 
-class RaceHumans(name: String, members: MutableMap<String, Human>, questions: ArrayList<String>) :
-    Race<Human>(name, members, questions)
+class RaceHumans(name: String, override val members: Map<String, Human>, questions: ArrayList<String>) :
+    Race(name, members, questions)

@@ -1,6 +1,6 @@
 package domain
 
-open class Race <T: Creature> (open val name: String, open val members: MutableMap<String, T>, val questions: MutableList<String>) {
+open class Race(open val name: String, open val members: Map<String, Creature>, val questions: ArrayList<String>) {
     fun meeting(location: Location) {
         println("Раса ${this.name} собирается в одном месте")
         members.forEach {
@@ -10,11 +10,8 @@ open class Race <T: Creature> (open val name: String, open val members: MutableM
 
     fun solveQuestions() {
         println("Раса ${this.name} решает вопросы")
-        questions.forEach { question ->
-            println("Question: $question")
-            members.forEach {
-                it.value.solveQuestions()
-            }
+        members.forEach {
+            it.value.solveQuestions()
         }
         questions.clear()
         println("Вопросы решены")
