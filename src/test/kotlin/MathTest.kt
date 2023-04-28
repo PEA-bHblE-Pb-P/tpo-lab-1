@@ -27,16 +27,18 @@ class MathTest {
     fun parameterizedTest(x: Double, eps: Double, expected: Double) {
         assertThat(Math.arctg(x, eps))
             .isCloseTo(expected, offset(eps))
+        assertThat(Math.arctg(-x, eps))
+            .isCloseTo(-expected, offset(eps))
     }
 
     class TestInputProvider : ArgumentsProvider {
         override fun provideArguments(context: ExtensionContext?): Stream<Arguments> =
             Stream.of(
-                Arguments.of(-1.73205,   0.00001,   -1.047197),
-                Arguments.of(-0.57735,   0.00001,   -0.523598),
                 Arguments.of( 0.0,       0.00001,    0.0),
                 Arguments.of( 0.57735,   0.00001,    0.523598),
-                Arguments.of( 1.73205,   0.00001,    1.047197)
+                Arguments.of( 1.73205,   0.00001,    1.047197),
+                Arguments.of( 100,       0.00001,    1.560796),
+                Arguments.of( 10000,     0.00001,    1.570696),
             )
     }
 }
